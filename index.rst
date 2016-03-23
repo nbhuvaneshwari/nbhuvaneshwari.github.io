@@ -1,7 +1,0 @@
-<html>
-<head>
-</head>
-<body>
-My Site
-</body>
-</html>
