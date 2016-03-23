@@ -1,5 +1,32 @@
 ---
 layout: post
-title:  "Welcome to Puppet!"
+title: Puppet - A configuration Management Tool
 date:   2016-03-23 12:08:55 +0530
 ---
+
+## Introduction
+
+[Puppet](https://puppetlabs.com/puppet/what-is-puppet) is a [configuration management tool](https://en.wikipedia.org/wiki/Configuration_management), framework for systems automation, [declarative Domain Specific Language (DSL)](https://en.wikipedia.org/wiki/Declarative_programming#Domain-specific_languages), OpenSource software written in Ruby works on Linux, Unix, MacOS, Windows.
+
+In this blog, we'll start with basics of puppet syntax, We'll then move on to how Puppet deals with dependencies.
+
+# Keywords
+
+* [Hiera](https://docs.puppetlabs.com/hiera/latest/) - Key-value lookup tool where Puppet data can be placed
+
+* [Facter](https://docs.puppetlabs.com/references/glossary.html#facter) - Complemen"tary tool to retrieve system's data
+
+* [Resources](https://docs.puppetlabs.com/puppet/3.8/reference/lang_resources.html) - Describes some aspect of a system, like a service that must be running(exec), a package that must be installed(package) or a file/directory to be copied(file).
+
+* [Classes](https://docs.puppetlabs.com/puppet/3.8/reference/lang_classes.html) - Named blocks of Puppet code, which are stored in modules for later use and are not applied until they are invoked by name in manifest.
+
+* [Nodes](https://docs.puppetlabs.com/puppet/3.8/reference/lang_node_definitions.html) - Set of classes defined in manifest
+
+* [Manifests](https://docs.puppetlabs.com/puppet/4.4/reference/modules_fundamentals.html#manifests) - Blocks of Puppet code that can be evaluated multiple times with different parameters(Files with .pp extensions).
+
+* [notify](https://docs.puppetlabs.com/references/glossary.html#notify) - Used to print the statement or define the relationship between resources
+
+* [master](https://docs.puppetlabs.com/references/glossary.html#master) - In puppet client-server deployment, the server is known as the Puppet master and client is know as agent.
+
+* [masterless](https://docs.puppetlabs.com/references/glossary.html#master) - Referred to a Puppet node that does not rely on a master(e.g, puppet apply manifest)
+
