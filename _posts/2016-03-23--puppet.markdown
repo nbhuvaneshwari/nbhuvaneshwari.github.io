@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Puppet - A configuration Management Tool
+title: Puppet - A Configuration Management Tool
 date:   2016-03-23 12:08:55 +0530
 ---
 
@@ -29,4 +29,92 @@ In this blog, we'll start with basics of puppet syntax, We'll then move on to ho
 * [master](https://docs.puppetlabs.com/references/glossary.html#master) - In puppet client-server deployment, the server is known as the Puppet master and client is know as agent.
 
 * [masterless](https://docs.puppetlabs.com/references/glossary.html#master) - Referred to a Puppet node that does not rely on a master(e.g, puppet apply manifest)
+
+## Installation and Configuration
+
+# Pre-Install Process
+
+* Deployment Type - Either Client/Server architecture(puppet master and agents) or Self contained architecture(masterless)
+
+* Designate Server
+    - The master must be running some kind of Unix/Linux. A Puppet master should be a dedicated machine with a fast processor, lots of RAM, and a fast disk. It must also be reachable at a reliable hostname.
+
+    - Agent can be windows or Linux
+
+# Installing puppet master
+
+* Should have root permissions
+
+* For rpm based puppet master installation.
+
+   {% highlight ruby %}
+    sudo yum install puppetserver
+   {% endhighlight %}
+
+   `Which install puppetagent package as a dependency.`
+
+* Configure puppet master configuration in /etc/puppetlabs/puppet/puppet.conf
+
+* For rpm based puppet agent installation.
+
+   {% highlight ruby %}
+    sudo yum install puppet-agent
+   {% endhighlight %}
+
+# Standalone puppet\Masterless puppet
+
+  They act as their own Puppet master. Every node periodically uses the ``puppet apply`` command to compile and apply its own configuration, using a full set of Puppet modules and manifests.
+
+# Installing puppet agent
+
+* Installing on windows ``Vista\7\8\2003(R2)\2008(R2)\2012(R2``
+
+* [Download](https://downloads.puppetlabs.com/windows/?_ga=176640550.283626627.1461572031) a windows package
+
+* Installing puppet using command.
+
+     ``msiexec /l*v install.txt /qn /norestart /i puppet-<VERSION>.msi PUPPET_MASTER_SERVER=<puppet_fqdn>``
+   
+   `/l*v install.txt` to log the progress of the installation to a file.
+
+   Once the msiexec command executed successfuly. puppet service will be running
+
+# Certificate signing between puppet master and agent 
+
+* Include PUPPET MASTER DNS name into agents machines.
+
+  edit `` C:\Windows\system32\drivers\etc\hosts``  append at last
+  PUPPET_MASTER_IP   PUPPET_MASTER_FQDN
+
+* Run puppet agent --test to request a certificate.
+
+* On the puppet master server, run ``puppet cert list --all``, Which will list all the signed and un-signed agents
+  for e.g.,
+
+  ``
+   "puppet.agent1.loc"       (SHA256) E4:E6:AC:B3:23:74:F6:5B:5B:65:66
+  + "puppetlabs.agent2.loc"      (SHA256) B9:B0:93:83:F0:3C:6E:69:F1:FC:B3:7C:51:96
+  + "puppet.agent3.loc"      (SHA256) C5:56:55:19:D4:E6:CF:15
+  ``
+   --> `+` mark indicate which is already certified.
+   --> The other one is requested for certificate sign
+
+* To accept the request and sign certificate, run `` puppet cert sign <puppet_agent_fqdn>`` for e.g.,
+
+   `` puppet cert sign puppet.agent1.loc 
+      
+      Notice: Signed certificate request for puppet.agent1.loc
+      Notice: Removing file Puppet::SSL::CertificateRequest puppet.agent1.loc at '~/.puppet/var/ssl/ca/requests/puppet.agent1.loc.pem'
+      ``
+
+# Puppet master configuration in puppet.conf
+
+  First thing before setting values to the variables. You can verify the already set default values.
+  By running `puppet config print` command.
+
+* environmentpath: Set this to `$confdir/environments` to enable directory environments.
+* modulepath: Set this to directory where all puppet modules resides.
+* We can also set basemodulepath which is common across all environments
+* manifest: The main entry point for all manifests. Default is single `site.pp` file path.
+* ordering = manifest (all nodes) : This causes unrelated resources to be applied in the order they are written, instead of in effectively random order. You should still specify dependencies, but this reduces frustration if you forget one.
 
